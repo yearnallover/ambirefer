@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AmbiRefer3D</title>
+    <meta
+      name="description"
+      content="AmbiRefer3D: 3D Visual Grounding with Referential Ambiguity."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="page-header" id="top">
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a class="brand" href="#top">AmbiRefer3D</a>
+        <div class="nav-links">
+          <a href="#demo">Demo</a>
+          <a href="#abstract">Abstract</a>
+          <a href="#method">Method</a>
+          <a href="#data">Data</a>
+          <a href="#citation">Citation</a>
+        </div>
+      </nav>
+
+      <section class="hero">
+        <p class="venue">ICML 2026</p>
+        <h1>AmbiRefer3D: 3D Visual Grounding with Referential Ambiguity</h1>
+        <p class="authors">
+          Rongjiang Zhu*, Wei Kang*, Zeqi Liu, Junyu Chen, Shuo Yang+, Xinxiao Wu+
+        </p>
+        <p class="author-note">* equal contribution, + corresponding authors</p>
+        <p class="affiliations">
+          Beijing Institute of Technology, Shenzhen MSU-BIT University
+        </p>
+        <div class="action-row" aria-label="Project resources">
+          <a class="button primary" href="assets/ambirefer3d-paper.pdf">Paper</a>
+          <a
+            class="button"
+            href="https://github.com/yearnallover/AmbiRefer3D"
+            target="_blank"
+            rel="noreferrer"
+            >Code</a
+          >
+          <a class="button" href="#demo">Demo</a>
+          <span class="button disabled" aria-disabled="true">Dataset soon</span>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="section section-tight" id="demo">
+        <div class="video-shell">
+          <video
+            controls
+            playsinline
+            preload="metadata"
+            poster="assets/hero-poster.jpg"
+          >
+            <source src="assets/interactive_3dvg_demo.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <p class="media-caption">
+          Interactive 3D visual grounding demo: an ambiguous query is refined
+          through model-generated clarification and human feedback.
+        </p>
+      </section>
+
+      <section class="section section-tight" id="abstract">
+        <h2>Abstract</h2>
+        <p>
+          AmbiRefer3D studies 3D visual grounding when a natural-language query
+          may refer to multiple plausible objects. Instead of forcing a single
+          prediction from an underspecified expression, the framework retrieves
+          candidate objects, asks discriminative clarification questions, and
+          filters candidates across interaction rounds until the target can be
+          grounded.
+        </p>
+        <p>
+          The dataset supports this setting with ambiguity-aware annotations
+          spanning indoor 3D scenes, multi-round question-answer supervision,
+          and evaluation metrics that measure both grounding accuracy and the
+          efficiency of disambiguation.
+        </p>
+        <div class="stat-grid" aria-label="Dataset statistics">
+          <article class="stat-card">
+            <strong>7,316</strong>
+            <span>indoor 3D scenes</span>
+          </article>
+          <article class="stat-card">
+            <strong>47,085</strong>
+            <span>object targets</span>
+          </article>
+          <article class="stat-card">
+            <strong>141,255</strong>
+            <span>ambiguous queries</span>
+          </article>
+          <article class="stat-card">
+            <strong>113,904</strong>
+            <span>clarification steps</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="method">
+        <h2>Method</h2>
+        <div class="split-grid">
+          <figure class="figure-frame">
+            <img
+              src="assets/framework-overview.jpg"
+              alt="AmbiRefer3D framework overview"
+            />
+            <figcaption>
+              Candidate generation followed by interactive disambiguation.
+            </figcaption>
+          </figure>
+          <div class="text-stack">
+            <article>
+              <h3>Candidate generation</h3>
+              <p>
+                The first stage retrieves a candidate set that is semantically
+                consistent with the ambiguous referring expression, preserving
+                plausible targets instead of prematurely collapsing to one
+                object.
+              </p>
+            </article>
+            <article>
+              <h3>Interactive disambiguation</h3>
+              <p>
+                The second stage selects clarifying constraints, asks questions
+                about attributes or spatial relations, and filters the
+                candidate set after each answer.
+              </p>
+            </article>
+            <article>
+              <h3>Stopping behavior</h3>
+              <p>
+                A stopping head decides whether the current candidate set is
+                sufficiently resolved or another interaction round is needed.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="data">
+        <h2>Ambiguity-Aware Data</h2>
+        <div class="wide-figure">
+          <img
+            src="assets/data-pipeline.jpg"
+            alt="AmbiRefer3D data generation pipeline"
+          />
+        </div>
+        <div class="three-col">
+          <article>
+            <h3>Attribute ambiguity</h3>
+            <p>
+              Queries omit visual properties such as color, material, shape, or
+              appearance, leaving multiple objects compatible with the text.
+            </p>
+          </article>
+          <article>
+            <h3>Spatial ambiguity</h3>
+            <p>
+              Queries need relational context such as near, left of, or inside
+              to distinguish a target from similar objects.
+            </p>
+          </article>
+          <article>
+            <h3>Composed ambiguity</h3>
+            <p>
+              Hard cases require both visual attributes and spatial relations,
+              motivating multi-round clarification.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="rounds">
+        <h2>Interactive Demo Frames</h2>
+        <div class="round-viewer">
+          <div class="round-tabs" role="tablist" aria-label="Demo stages">
+            <button class="stage-button active" type="button" data-stage="0">
+              Query
+            </button>
+            <button class="stage-button" type="button" data-stage="1">
+              Question
+            </button>
+            <button class="stage-button" type="button" data-stage="2">
+              Answer
+            </button>
+            <button class="stage-button" type="button" data-stage="3">
+              Grounding
+            </button>
+          </div>
+          <div class="round-content">
+            <img
+              id="stage-image"
+              src="assets/frame-query.jpg"
+              alt="Initial ambiguous query with candidate boxes"
+            />
+            <div class="round-copy">
+              <p class="eyebrow" id="stage-label">Round 0</p>
+              <h3 id="stage-title">Initial ambiguous query</h3>
+              <p id="stage-body">
+                The query "the chair" maps to multiple candidates, so the
+                system keeps several plausible objects active.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="results">
+        <h2>Evaluation Focus</h2>
+        <div class="split-grid reverse">
+          <div class="text-stack">
+            <article>
+              <h3>Target survival</h3>
+              <p>
+                Measures whether the ground-truth target remains inside the
+                retrieved candidate set before interaction begins.
+              </p>
+            </article>
+            <article>
+              <h3>Success@K</h3>
+              <p>
+                Measures whether the target can be identified within a limited
+                number of clarification rounds.
+              </p>
+            </article>
+            <article>
+              <h3>Average rounds</h3>
+              <p>
+                Tracks interaction cost and exposes whether the model resolves
+                ambiguity efficiently.
+              </p>
+            </article>
+          </div>
+          <figure class="figure-frame">
+            <img
+              src="assets/interaction-dynamics.jpg"
+              alt="Interactive disambiguation dynamics"
+            />
+            <figcaption>
+              Accuracy rises as additional rounds reduce candidate ambiguity.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section" id="resources">
+        <h2>Resources</h2>
+        <div class="resource-grid">
+          <a class="resource-item" href="assets/ambirefer3d-paper.pdf">
+            <span>Paper</span>
+            <small>Local PDF</small>
+          </a>
+          <a
+            class="resource-item"
+            href="https://github.com/yearnallover/AmbiRefer3D"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>Code</span>
+            <small>GitHub</small>
+          </a>
+          <span class="resource-item muted">
+            <span>Dataset</span>
+            <small>Coming soon</small>
+          </span>
+          <span class="resource-item muted">
+            <span>Poster</span>
+            <small>Placeholder</small>
+          </span>
+        </div>
+      </section>
+
+      <section class="section section-tight" id="citation">
+        <div class="citation-heading">
+          <h2>Citation</h2>
+          <button class="copy-button" type="button" data-copy-bibtex>
+            Copy
+          </button>
+        </div>
+        <pre id="bibtex"><code>@inproceedings{zhu2026ambirefer3d,
+  title = {AmbiRefer3D: 3D Visual Grounding with Referential Ambiguity},
+  author = {Zhu, Rongjiang and Kang, Wei and Liu, Zeqi and Chen, Junyu and Yang, Shuo and Wu, Xinxiao},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  year = {2026}
+}</code></pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Built as a project-page draft for AmbiRefer3D. Replace placeholder
+        resources with final release assets when ready.
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
